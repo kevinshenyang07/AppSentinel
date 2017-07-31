@@ -1,16 +1,16 @@
-# ConferenceCall
+# App Watcher
 
 ### Background
 
-This game is about answering the analysts' questions on a conference call by choosing the right visualization to find the answer. The user will be given a sample of a table with many data points that is related to a imaginary company. It is intends to show the possibilities of exploratory analysis.
+App Watcher is a dashboard that takes in live data and interact with different charts.
 
 ### Functionality & MVP  
 
-In this game, the user will be able to:
+In this dashboard, it should has features below:
 
-- [ ] view the structure of a table
-- [ ] Choose or skip an answer to a question
-- [ ] Select columns for x-axis, y-axis and aggregate functions
+- [ ] all charts are displayed correctly and easy to read
+- [ ] a user can click on the charts to view details
+- [ ] a user can update some of the charts with checkbox/dropdown menu
 
 In addition, this project will include:
 
@@ -37,16 +37,16 @@ This project will be implemented with the following technologies:
 - Get a green bundle with `webpack`
 - Learn enough `D3.js` to render an object to the `Canvas` element
 
-**Day 2**: Get data ready, including both data table and questions.
+**Day 2**: Get data ready, get the first two charts displaying correctly.
 
-**Day 3**: Get D3.js displaying correctly with user interaction.
+**Day 3**: Get the rest of the charts displaying correctly.
 
-**Day 4**: Implement the logic of the game.
+**Day 4**: Styling of the charts.
 
 
 ### Bonus features
 
 There are many directions this cellular automata engine could eventually go.  Some anticipated updates are:
 
-- [ ] More types of visualizations
-- [ ] Better graphic
+- [ ] Offer an "add" button to let users create a chart themselves.
+- [ ] Charts are draggable.
