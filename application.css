@@ -1,8 +1,33 @@
-#dashboard div {
-  font: 10px sans-serif;
-  background-color: steelblue;
-  text-align: right;
-  padding: 3px;
-  margin: 1px;
-  color: white;
+body {
+	background-color: #f1f1f1;
+}
+
+.panel-ticking-numbers {
+	background-color: #00a0e9 !important;
+	color: #ffffff;
+}
+.panel-ticking-numbers h2 {
+	font-size: 3.5em;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.panel-title h5 {
+	padding-left: 10px;
+	margin-bottom: 0px;
+}
+
+.panel-body {
+	padding: 0px 20px 0px 20px;
+}
+
+.panel-card {
+	box-shadow: 1px 0px 1px rgba(0, 0, 0, 0.25);
+	background-color: white;
+	padding: 20px;
+}
+
+.no-margin {
+	margin: 0px;
 }

@@ -10,7 +10,7 @@ App Sentinel takes in live data and present different levels of details interact
 
 A dashboard should serve its purpose to make its consumer understand intuitively. But to specific, the ulmate goal is to build a visualization tool like Airbnb's Superset, in which user can select the value to display on x-axis and y-axis, and perform arbitrary aggregation functions like users do in a SQL query.
 
-![superset](images/superset.gif)
+![superset](superset.gif)
 
 And yes, we can do interactive data visualization with D3 like [this](http://bl.ocks.org/anupsavvy/9513382) and [this](http://bl.ocks.org/diethardsteiner/3287802).
 
@@ -25,6 +25,12 @@ In this dashboard, it should has features below:
 In addition, this project will include:
 
 - [ ] A production Readme
+
+### Wireframes
+
+This app will consist of a single screen with game status, game controls, and nav links to my Github / LinkedIn.
+
+![wireframes](wireframe.png)
 
 ### Architecture and Technologies
 
@@ -46,6 +52,20 @@ File structure:
 -- application.css
 
 -- index.html
+
+
+### Implementation Timeline
+
+**Day 1**: Setup all necessary Node modules, including getting webpack up and running and `D3.js` installed.  Create `webpack.config.js` as well as `package.json`.  Write a basic entry file and the bare bones of scripts outlined above.  Learn the basics of `D3.js`.  Goals for the day:
+
+- Get a green bundle with `webpack`
+- Learn enough `D3.js` to render an object to the `Canvas` element
+
+**Day 2**: Get data ready, get the first two charts displaying correctly.
+
+**Day 3**: Get the rest of the charts displaying correctly.
+
+**Day 4**: Styling of the charts.
 
 
 ### Bonus features
