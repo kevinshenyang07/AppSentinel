@@ -2,17 +2,6 @@ body {
 	background-color: #f1f1f1;
 }
 
-.panel-ticking-numbers {
-	background-color: #00a0e9 !important;
-	color: #ffffff;
-}
-.panel-ticking-numbers h2 {
-	font-size: 3.5em;
-	font-weight: bold;
-	text-align: center;
-	padding-top: 10px;
-}
-
 .panel-title h5 {
 	padding-left: 10px;
 	margin-bottom: 0px;
@@ -30,4 +19,47 @@ body {
 
 .no-margin {
 	margin: 0px;
+}
+
+
+/* ticking numbers */
+.panel-ticking-numbers {
+	background-color: #00a0e9 !important;
+	color: #ffffff;
+}
+.panel-ticking-numbers h2 {
+	font-size: 3em;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 10px;
+}
+
+
+/* active users */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #f3f3f3;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: .7em;
+  color: #a0a0a0;
+}
+
+.areaM {
+  fill: rgba(0, 160, 233, 0.7);
+}
+
+.usertipPoints {
+  stroke: white;
+  stroke-width: 2px;
+  opacity: 0;
+  fill: #00a0e9;
+}
+
+.tipDot {
+  stroke: black;
+  stroke-width: 0.5px;
 }
