@@ -8,41 +8,115 @@
   </head>
   <body>
 
+    <!-- header -->
     <div class="container">
       <div class="col-sm-12 col-md-12">
-        <h2>App Sentinel - Monitor Your App by seconds, not days.</h2>
-        <p>Take a look at the code in <a href="https://github.com/kevinshenyang07/AppSentienl">Github Repo</a></p>
+        <h2>App Sentinel</h2>
+        <h5>Monitor Your App by seconds, not days.</h5>
+        <br>
       </div>
     </div>
 
-    <div class="container"></div>
+    <!-- first row -->
+    <div class="container">
       <div class="col-sm-12 col-md-4">
         <div class="panel panel-card panel-ticking-numbers">
     			<div class="panel-title">
-    				<h5 class="no-margin">Revenue in last 30 days</h5>
+    				<h5 class="no-margin">Revenue in Last 30 Days</h5>
     			</div>
     			<div class="panel-body">
             <h2 id="monthly-revenue"></h2>
             <hr>
   				</div>
           <div class="panel-title">
-            <h5 class="no-margin">Downloads in last 30 days</h5>
+            <h5 class="no-margin">Downloads in Last 30 Days</h5>
           </div>
           <div class="panel-body">
             <h2 id="monthly-downloads"></h2>
           </div>
     		</div>
       </div>
+
+      <div class='col-sm-12 col-md-8'>
+        <div class="panel panel-card">
+          <div class="panel-title">
+            <h5 class='no-margin'>Users Engagement</h5>
+          </div>
+          <div class="panel-body">
+            <div id="active-users" style="height:218px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class='col-sm-12 col-md-8'>
-      <div class="panel panel-card">
-        <div class="panel-title">
-          <h5 class='no-margin m-b'>Users Engagement</h5>
+    <!-- second row  -->
+    <div class="container">
+      <div class="col-sm-12 col-md-4">
+        <div class="panel panel-card panel-reviews">
+          <div class="panel-title">
+            <h5 class="no-margin">Keyword Alert for Reviews</h5>
+          </div>
+          <div class="panel-body">
+            <div id="reviews" style="height:300px;">
+              <div id="reviews-container">
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="panel-body">
-          <div id="active-users" style="height:218px;"></div>
+      </div>
+
+      <div class="col-sm-12 col-md-8">
+        <div class="panel panel-card">
+          <div class="panel-title">
+            <h5 class='no-margin'>Installs by Channels This Month
+              (try hovering on the charts)
+            </h5>
+          </div>
+          <div class="panel-body">
+            <div id="channels" style="height:300px;">
+              <div id="channels-left"></div>
+              <div id="channels-right"></div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- third row -->
+    <div class="container">
+      <div class="col-sm-12 col-md-4">
+        <div class="panel panel-card panel-reviews">
+          <div class="panel-title">
+            <h5 class="no-margin">Average Rating in Last 24 Hours</h5>
+          </div>
+          <div class="panel-body">
+            <button type="button" id="button">in Last Week</button>
+            <h2 id="rating" style="height:220px;"></h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-8">
+        <div class="panel panel-card">
+          <div class="panel-title">
+            <h5 class='no-margin'>Geolocation Distribution (by thousand users)</h5>
+          </div>
+          <div class="panel-body">
+            <div id="geo" style="height:250px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="container">
+      <div class="col-sm-12 col-md-12">
+        <p>Take a look at the code in this
+          <a href="https://github.com/kevinshenyang07/AppSentienl">
+            Github Repo
+          </a>.
+        </p>
       </div>
     </div>
 

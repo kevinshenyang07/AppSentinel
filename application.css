@@ -44,7 +44,7 @@ body {
 }
 
 .axis text {
-  font-size: .7em;
+  font-size: 1em;
   color: #a0a0a0;
 }
 
@@ -62,4 +62,135 @@ body {
 .tipDot {
   stroke: black;
   stroke-width: 0.5px;
+}
+
+
+/* channels */
+#channels {
+  display: flex;
+}
+
+#channels path { stroke: #fff; }
+
+#channels path:hover { opacity:0.9; }
+
+#channels-right rect:hover { fill: #00a0e9; }
+
+#channels.axis {  font: 10px sans-serif; }
+
+.legend tr{
+	border-bottom:1px solid grey;
+}
+
+.legend tr:first-child {
+	border-top:1px solid grey;
+}
+
+#channels.axis path, #channels.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#channels.x.axis path {
+	display: none;
+}
+
+#channels-left {
+	width: 40%;
+	height: 100%;
+}
+
+#channels-right {
+	width: 60%;
+	height: 100%;
+}
+
+.legend{
+	margin: 10px 0px 0px 0px;
+  display: flex;
+	align-items: flex-start;
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+.legend tr {
+	border-bottom: 1px solid grey;
+}
+
+.legend tr:first-child {
+	border-top:1px solid grey;
+}
+
+.legend td{
+  padding: 4px 5px;
+  vertical-align:bottom;
+}
+.legend-platform, .legend-perc{
+  align:right;
+  width:50px;
+}
+
+
+/* geo */
+#geo rect {
+	fill: steelblue;
+}
+
+#geo rect:hover {
+	opacity: 0.9;
+}
+
+#geo.axis path,
+#geo.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+#geo.x path {
+	display: none;
+}
+
+.toolTip {
+	position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid grey;
+  padding: 10px;
+  text-align: center;
+}
+
+
+/* reviews */
+#reviews {
+	padding: 20px 0px 20px 0px;
+}
+
+#reviews-container p {
+	margin: 0px;
+	color: #797979;
+}
+
+#reviews-container hr {
+	margin: 10px 0px 10px 0px;
+}
+
+#reviews-container hr:last-child {
+	display: none;
+}
+
+.attention-high {
+	color: red;
+}
+
+.attention-medium {
+	color: #e08214;
+}
+
+.attention-low {
+	color: green;
 }
