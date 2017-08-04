@@ -6,17 +6,25 @@
 
 All the mobile companies understand the performance of their apps are critical to their success. The growth hackers care a lot about user activities, the marketeers care a lot about cost/downloads efficiency, and the engineers care a lot about high availability and low latency.
 
-App Sentinel is a dashboard that is designed to visualize the most important metrics for certain domain. In this case, I choose growth hacking - the topic I'm more familiar with.
+App Sentinel is a dashboard that is designed to visualize the most important metrics for one of those domains. In this case, I choose growth hacking - the topic I'm more familiar with.
 
-App Sentinel takes in live data and present different levels of details interactively. For now it uses randomly generated data to emulate that process but it would be easy to be plugged with a real-time data source.
+App Sentinel is a front-end project, but it's designed to be able to be plugged into a live data feed from back-end easily. All visualzations ingest JSON data and have no dependencies on the back-end. To emulate that process it uses randomly generated data.
 
-A dashboard should serve its purpose to make its consumer understand intuitively. But to specific, the ulmate goal is to build a visualization tool like Airbnb's Superset, in which user can select the value to display on x-axis and y-axis, and perform arbitrary aggregation functions like users do in a SQL query.
+First four visualizations: 
 
-![superset](images/superset.gif)
+![desktop1](docs/desktop1.png)
 
-And yes, we can do interactive data visualization with D3 like [this](http://bl.ocks.org/anupsavvy/9513382) and [this](http://bl.ocks.org/diethardsteiner/3287802).
+Fifth and sixth visualizations:
 
-### Functionality & MVP  
+![desktop2](docs/desktop2.png)
+
+The view on mobile:
+
+![mobile](docs/mobile.png)
+
+### Features and Implementation
+
+Every visualzation is designed to present different levels of details interactively.
 
 In this dashboard, it should has features below:
 
@@ -32,18 +40,15 @@ In addition, this project will include:
 
 This project will be implemented with the following technologies:
 
-- Vanilla JavaScript for data .
-- `D3.js` for visualization
-- bootstrap to give it some responsiveness.
+- Vanilla JavaScript combined with `jQuery` for basic DOM manipulation and event handling.
+- `D3.js` for constructing each visualization component.
+- `Bootstrap` for making this app responsive.
 
 File structure:
 
 -- docs
 
--- lib
-
- - main.js (entrance file)
- - chart_x.js (for each visualization)
+-- lib (including main.js and other components)
 
 -- application.css
 
@@ -52,7 +57,7 @@ File structure:
 
 ### Bonus features
 
-There are many directions this cellular automata engine could eventually go.  Some anticipated updates are:
+There are many directions this dashboard app could eventually go. Some of the useful features would be:
 
 - [ ] Offer an "add" button to let users create a chart themselves.
 - [ ] Charts are draggable.
