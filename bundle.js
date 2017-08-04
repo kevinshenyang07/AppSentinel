@@ -224,7 +224,7 @@ var generate = function generate(data, id, categories, axisNum) {
     }).attr("cy", function (d) {
         return y(d[option]);
     }).attr("r", "6px").on("mouseover", function (d) {
-        // d3.select(this).transition().duration(100).style("opacity", 1);
+        d3.select(this).transition().duration(100).style("opacity", 1);
         svg.append("g").attr("class", "tipDot").append("line").attr("class", "tipDot").transition().duration(50).attr("x1", x(d['time'])).attr("x2", x(d['time'])).attr("y2", height);
 
         svg.append("polyline") // attach a polyline
@@ -244,7 +244,7 @@ var generate = function generate(data, id, categories, axisNum) {
             'trigger': 'hover'
         }).tooltip('show');
     }).on("mouseout", function (d) {
-        // d3.select(this).transition().duration(100).style("opacity", 0);
+        d3.select(this).transition().duration(100).style("opacity", 0);
         d3.selectAll('.tipDot').transition().duration(100).remove();
         $(this).tooltip('destroy');
     });
@@ -350,7 +350,7 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
         //update input data
         activeUserData.push(generateActiveUserNumbers(hAxis + ":" + mAxis));
 
-        // pseudo time update 
+        // pseudo time update
         if (mAxis === 59) {
             hAxis++;
             mAxis = 0;

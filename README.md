@@ -8,8 +8,6 @@ All the mobile companies understand the performance of their apps are critical t
 
 App Sentinel is a dashboard that is designed to visualize the most important metrics for one of those domains. In this case, I choose growth hacking - the topic I'm more familiar with.
 
-App Sentinel is a front-end project, but it's designed to be able to be plugged into a live data feed from back-end easily. All visualzations ingest JSON data and have no dependencies on the back-end. To emulate that process it uses randomly generated data.
-
 First four visualizations: 
 
 ![desktop1](docs/desktop1.png)
@@ -18,23 +16,65 @@ Fifth and sixth visualizations:
 
 ![desktop2](docs/desktop2.png)
 
-The view on mobile:
+Also support mobile:
 
-![mobile](docs/mobile.png)
+<img src="docs/mobile.png" height="300">
 
 ### Features and Implementation
 
-Every visualzation is designed to present different levels of details interactively.
+App Sentinel is a front-end project, but it's designed to be able to be plugged into a live data feed from back-end easily. All visualzations ingest JSON data and have no dependencies on the back-end. To emulate that process it uses randomly generated data.
 
-In this dashboard, it should has features below:
+Each visualzation is designed to present different levels of details interactively. The goal is to provide as much as information the user would need, but at the same time keep the visualization clean and organized.
 
-- [ ] all charts are displayed correctly and easy to read
-- [ ] a user can click on the charts to view details
-- [ ] a user can update some of the charts with dropdown menu
+#### Visualization for User Engagement
 
-In addition, this project will include:
+This is the most challenging one, and also most representative of D3's features. To be able to take in different number of data points and dynamically adjust the area and x axis. By using D3's enter-join-exit mechanism, one can declare the data join pattern first then push the data to the chart later. 
 
-- [ ] A production Readme
+Below is a code snippet for dynamically updating toolips points:
+
+```JavaScript
+// data enter and join
+points.selectAll(".usertipPoints")
+      .data(ddata)
+      .enter().append("circle")
+      .attr("class", "usertipPoints")
+      .attr("cx", d => x(d.time))
+      .attr("cy", d => y(d[option]))
+      .attr("r", "6px");
+
+// data exit
+points.selectAll(".usertipPoints")
+      .data(ddata)
+      .exit()
+      .transition()
+      .duration(200)
+      .remove();
+```
+
+#### Visualization for Installs By Channels
+
+This one is an attempt to create a dashboard with charts being aware of other charts' update. In this case I used `createView()` as a closure for all the chart-creating functions, but the data flow can be better managed in flux patterns.
+
+To make the two charts interacting with each other, I wrote a update method for each chart that can either update or reset based on the input, below is the code snippet to illustrate this pattern:
+
+```JavaScript
+function mouseover(d) {
+  const singleChannelData = data.filter(s => s.channel === d[0])[0];
+  // for a single channel, by platform
+  const nd = d3.keys(singleChannelData.platform).map(
+    s => ({type:s, platform: singleChannelData.platform[s]})
+      );
+    // call update functions of pie-chart and legend.
+    pieChart.update(nd);
+    legend.update(nd);
+  };
+
+function mouseout(d) {
+  // reset the pie-chart and legend.
+  pieChart.update(totalByPlatform);
+  legend.update(totalByPlatform);
+};
+```
 
 ### Architecture and Technologies
 
