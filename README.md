@@ -1,8 +1,10 @@
 # App Sentinel
 
+[Take a look at App Sentinel](https://kevinshenyang07.github.io/AppSentinel/)
+
 ### Background
 
-All the mobile companies understand the performance of their apps are critical to their success. The growth hackers care a lot about user activities, the marketeers care a lot about cost/downloads efficiency, and the engineers care a lot about high availability and low latency. 
+All the mobile companies understand the performance of their apps are critical to their success. The growth hackers care a lot about user activities, the marketeers care a lot about cost/downloads efficiency, and the engineers care a lot about high availability and low latency.
 
 App Sentinel is a dashboard that is designed to visualize the most important metrics for certain domain. In this case, I choose growth hacking - the topic I'm more familiar with.
 
@@ -42,7 +44,7 @@ File structure:
 
  - main.js (entrance file)
  - chart_x.js (for each visualization)
- 
+
 -- application.css
 
 -- index.html
