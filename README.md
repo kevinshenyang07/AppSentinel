@@ -18,7 +18,7 @@ Fifth and sixth visualizations:
 
 Also support mobile:
 
-<img src="docs/mobile.png" height="300">
+<img src="docs/mobile.png" height="400">
 
 ### Features and Implementation
 
@@ -60,14 +60,14 @@ To make the two charts interacting with each other, I wrote a update method for 
 ```JavaScript
 function mouseover(d) {
   const singleChannelData = data.filter(s => s.channel === d[0])[0];
-  // for a single channel, by platform
+  // for each single channel, get installs by platform
   const nd = d3.keys(singleChannelData.platform).map(
     s => ({type:s, platform: singleChannelData.platform[s]})
-      );
-    // call update functions of pie-chart and legend.
-    pieChart.update(nd);
-    legend.update(nd);
-  };
+  );
+  
+  pieChart.update(nd);
+  legend.update(nd);
+};
 
 function mouseout(d) {
   // reset the pie-chart and legend.
