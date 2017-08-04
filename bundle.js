@@ -144,7 +144,7 @@ var generateActiveUserNumbers = function generateActiveUserNumbers(time) {
     };
 };
 
-var generate = function generate(data, id, axisNum) {
+var generate = function generate(data, id, categories, axisNum) {
 
     // get data prepared
     var parseTime = d3.timeParse("%H:%M");
@@ -165,13 +165,16 @@ var generate = function generate(data, id, axisNum) {
         };
     });
 
+    var selected = $(".active-user-select").find(":selected").text();
+    var option = categories[selected];
+
     // set the range and scale the range to data
     var x = d3.scaleTime().range([0, width]).domain(d3.extent(ddata, function (d) {
         return d.time;
     }));
     // extent returns [min, max]
     var yRange = d3.extent(ddata, function (d) {
-        return d['DAU'];
+        return d[option];
     });
     var y = d3.scaleLinear().range([height, 0]).domain([yRange[1] / 2, yRange[1] * 1.2]);
 
@@ -184,11 +187,11 @@ var generate = function generate(data, id, axisNum) {
     var area = d3.area().curve(d3.curveCardinal).x(function (d) {
         return x(d.time);
     }).y0(height).y1(function (d) {
-        return y(d["DAU"]);
+        return y(d[option]);
     });
 
     // remove previous element
-    d3.select('.active-users').remove();
+    d3.selectAll('.active-users').remove();
 
     // define svg
     var svg = d3.select(id).append("svg").attr("id", "svg-active-users").attr("width", width + margin.right + margin.left).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -209,17 +212,14 @@ var generate = function generate(data, id, axisNum) {
 
     legend.append('rect').attr('width', legendSize).attr('height', legendSize).attr('transform', 'translate(0, -5)').style('fill', legendColor);
 
-    legend.append('text').data(ddata).attr('x', legendSize * 1.2).attr('y', legendSize / 2).text('Daily Active Users');
+    legend.append('text').data(ddata).attr('x', legendSize * 1.2).attr('y', legendSize / 2).text(selected);
 
     points.selectAll(".usertipPoints").data(ddata).enter().append("circle").attr("class", "usertipPoints").attr("cx", function (d) {
         return x(d.time);
     }).attr("cy", function (d) {
-        return y(d['DAU']);
+        return y(d[option]);
     }).attr("r", "6px").on("mouseover", function (d) {
-        console.log(this);
-
         // d3.select(this).transition().duration(100).style("opacity", 1);
-
         svg.append("g").attr("class", "tipDot").append("line").attr("class", "tipDot").transition().duration(50).attr("x1", x(d['time'])).attr("x2", x(d['time'])).attr("y2", height);
 
         svg.append("polyline") // attach a polyline
@@ -235,15 +235,19 @@ var generate = function generate(data, id, axisNum) {
         $(this).tooltip({
             'container': 'body',
             'placement': 'left',
-            'title': 'Daily Active User: ' + formatNumber(d['DAU']),
+            'title': selected + ": " + formatNumber(d[option]),
             'trigger': 'hover'
         }).tooltip('show');
     }).on("mouseout", function (d) {
         // d3.select(this).transition().duration(100).style("opacity", 0);
-
         d3.selectAll('.tipDot').transition().duration(100).remove();
-
         $(this).tooltip('destroy');
+    });
+
+    $(".active-user-select").change(function (sel) {
+        // remove old chart and re-generate
+        d3.selectAll("#svg-active-users").remove();
+        generate(data, id, categories, axisNum);
     });
 
     var axisOpt = { x: x, y: y, xAxis: xAxis, width: width, height: height };
@@ -252,7 +256,7 @@ var generate = function generate(data, id, axisNum) {
     return { axisOpt: axisOpt, svgAttr: svgAttr };
 };
 
-var redraw = function redraw(data, id, x, y, xAxis, svg, area, path, points, height, axisNum) {
+var redraw = function redraw(data, id, categories, x, y, xAxis, svg, area, path, points, height, axisNum) {
     //format of time data
     var parseTime = d3.timeParse("%H:%M");
     var formatNumber = d3.format(".0%");
@@ -265,6 +269,9 @@ var redraw = function redraw(data, id, x, y, xAxis, svg, area, path, points, hei
             'MAU': ele['MAU']
         };
     });
+
+    var selected = $(".active-user-select").find(":selected").text();
+    var option = categories[selected];
 
     x.domain(d3.extent(ddata, function (d) {
         return d.time;
@@ -281,18 +288,19 @@ var redraw = function redraw(data, id, x, y, xAxis, svg, area, path, points, hei
     points.selectAll(".usertipPoints").data(ddata).attr("class", "usertipPoints").attr("cx", function (d) {
         return x(d.time);
     }).attr("cy", function (d) {
-        return y(d['DAU']);
+        return y(d[option]);
     }).attr("r", "6px");
 
     //draw new dot
     points.selectAll(".usertipPoints").data(ddata).enter().append("circle").attr("class", "usertipPoints").attr("cx", function (d) {
         return x(d.time);
     }).attr("cy", function (d) {
-        return y(d['DAU']);
+        return y(d[option]);
     }).attr("r", "6px");
 
     //remove old dot
     points.selectAll(".usertipPoints").data(ddata).exit().transition().duration(200).remove();
+    // debugger;
 };
 
 //dynamic data and chart update
@@ -303,16 +311,21 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
         return generateActiveUserNumbers(m);
     });
 
-    var categories = ['Daily Active Users', 'Weekly Active Users', 'Monthly Active Users'];
+    var categories = {
+        'Daily Active Users': "DAU",
+        'Weekly Active Users': "WAU",
+        'Monthly Active Users': "MAU"
+    };
 
     var hAxis = 10;
     var mAxis = 10;
 
     var id = "#active-users";
-    var sca = new generate(activeUserData, id, 8);
+
+    var sca = new generate(activeUserData, id, categories, 8);
 
     var interval = setInterval(function () {
-        //update donut data
+        //update input data
         activeUserData.push(generateActiveUserNumbers(hAxis + ":" + mAxis));
 
         if (mAxis === 59) {
@@ -322,14 +335,12 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
             mAxis++;
         }
 
-        if (Object.keys(activeUserData).length === 20) activeUserData.shift();
+        if (Object.keys(activeUserData).length === 16) activeUserData.shift();
 
-        redraw(activeUserData, ".active-users", sca.axisOpt['x'], sca.axisOpt['y'], sca.axisOpt['xAxis'], sca.svgAttr['svg'], sca.svgAttr['area'], sca.svgAttr['path'], sca.svgAttr['points'], sca.axisOpt['height'], 8);
-
-        // debugger;
+        redraw(activeUserData, id, categories, sca.axisOpt['x'], sca.axisOpt['y'], sca.axisOpt['xAxis'], sca.svgAttr['svg'], sca.svgAttr['area'], sca.svgAttr['path'], sca.svgAttr['points'], sca.axisOpt['height'], 8);
     }, 4000);
 
-    $(id).on("remove", function () {
+    $("#svg-active-users").on("remove", function () {
         return clearInterval(interval);
     });
 };
@@ -641,7 +652,7 @@ var displayGeoDist = exports.displayGeoDist = function displayGeoDist() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var sampleReviews = [{ user: 'Andrew M.', body: "The text <b class='attention-high'>broke</b> out of the box, is it because I use bigger <b class='attention-low'>font</b> size?" }, { user: 'Elliot H.', body: "The <b class='attention-medium'>hamburger menu</b> does not respond to me, can't change my name!!" }, { user: 'Jules C.', body: "The app <b class='attention-high'>crashed</b> after I clicked the <b class='attention-low'>sumbit</b> button, what happened?" }, { user: 'Munyo F.', body: "I like it but it's kinda <b class='attention-medium'>slow</b> when I don't have WIFI." }, { user: 'Aaron W.', body: "The <b class='attention-low'>'start'</b> button should be on the bottom of the screen." }, { user: 'Chuck N.', body: "The animation is fancy, but I don't want to <b class='attention-medium'>wait</b> for it :P" }, { user: 'Louis C.', body: "There seems to be a <b class='attention-medium'>hiccup</b> when I was tapping on the <b class='attention-low'>'carousel'</b>." }];
+var sampleReviews = [{ user: 'Andrew M.', body: "The text <b class='attention-high'>broke</b> out of the box, is it because I use bigger <b class='attention-low'>font</b> size?" }, { user: 'Elliot H.', body: "The <b class='attention-medium'>hamburger menu</b> does not respond to me, can't change my name!!" }, { user: 'Jules C.', body: "The app <b class='attention-high'>crashed</b> after I clicked the <b class='attention-low'>sumbit</b> button, what happened?" }, { user: 'Munyo F.', body: "I like it but it's kinda <b class='attention-medium'>slow</b> when I don't have WIFI." }, { user: 'Aaron W.', body: "The <b class='attention-low'>start</b> button should be on the bottom of the screen." }, { user: 'Chuck N.', body: "The animation is fancy, but I don't want to <b class='attention-medium'>wait</b> for it :P" }, { user: 'Louis C.', body: "There seems to be a <b class='attention-medium'>hiccup</b> when I was tapping on the <b class='attention-low'>carousel</b>." }];
 
 var createReviews = function createReviews(reviews) {
   $(document).ready(function () {
@@ -681,19 +692,16 @@ var displayReviews = exports.displayReviews = function displayReviews() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var degToRad = function degToRad(deg) {
-  return deg * Math.PI / 180;
-};
-
-var generateData = function generateData() {
+var generateData = function generateData(period) {
+  var ratings = { day: 0.18, week: 0.13, month: 0.15 };
   var newarcsdata = [0.2, 0.2, 0.2, 0.2, 0.2];
-  var newneedledata = [d3.randomUniform(0.12, 0.2)()];
+  var newneedledata = [ratings[period]];
   return [newneedledata, newarcsdata];
 };
 
 var CreateGauge = function CreateGauge(id) {
   // geometry
-  var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+  var margin = { top: 20, right: 10, bottom: 25, left: 10 };
   var width = $(id).width();
   var height = $(id).height();
   var r = width / 2;
@@ -703,35 +711,48 @@ var CreateGauge = function CreateGauge(id) {
 
   var svg = d3.select(id).append("svg").attr("width", width).attr("height", height);
 
-  // svg.append('g').classed('axis', true)
-  //   .call(d3AxisRadialOuter(
-  //       angleScale.copy().range(angleScale.range().map(degToRad)),
-  //       r - 5
-  // ));
-
-  var arc = d3.arc().innerRadius(width * 5 / 16).outerRadius(width / 2).padAngle(0);
+  var arc = d3.arc().innerRadius(r * 4.5 / 8).outerRadius(r * 0.9);
+  // const outerArc = d3.arc().innerRadius(r * 5.5 / 8).outerRadius(r * 1.1);
   var pie = d3.pie().startAngle(-Math.PI / 2).endAngle(Math.PI / 2).sort(null).value(function (d) {
     return d;
   });
 
-  var data = generateData();
-  var arcs = svg.selectAll('.arc').data(pie(data[1])).enter().append('path').attr("d", arc).attr("width", width).attr("height", height).attr("transform", "translate(" + width / 2 + "," + (height - margin.bottom) + ")").style("fill", function (d, i) {
+  var data = generateData('day');
+  var arcs = svg.selectAll('g.slice').data(pie(data[1])).enter().append("svg:g").attr('class', 'slice');
+
+  arcs.append('svg:path').attr("d", arc).attr("width", width).attr("height", height).attr("transform", "translate(" + (r - margin.left) + "," + (height - margin.bottom) + ")").style("fill", function (d, i) {
     return colors[i];
+  });
+
+  var labels = ['0+', '1+', '2+', '3+', '4+'];
+  arcs.append("svg:text").attr("text-anchor", "middle").attr("transform", function (d) {
+    var x = arc.centroid(d)[0] + r - margin.left;
+    var y = arc.centroid(d)[1] + height - margin.bottom;
+    return "translate(" + [x, y] + ")";
+  }).style("fill", "black").text(function (d, i) {
+    return labels[i];
   });
 
   var needle = svg.selectAll(".needle").data(data[0]).enter().append('path').classed('needle', true).attr('d', ['M0 -1', 'L0.03 0', 'A 0.03 0.03 0 0 1 -0.03 0', 'Z'].join(' ')).attr("transform", function (d) {
     r = 180 * d / data[1][3] - 90;
-    return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ") " + "scale(" + width / 2 + ")";
+    return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ") " + "scale(" + width * 0.85 / 2 + ")";
   });
 
-  d3.select("#button").on("click", function () {
-    data = generateData();
-    arcs.data(pie(data[1])).transition().attr("d", arc);
-    needle.data(data[0]).transition().ease(d3.easeElasticOut).duration(2000).attr("transform", function (d) {
-      r = 180 * d / data[1][3] - 90;
-      return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ")" + "scale(" + height / 2 + ")";
+  handleClick('button-day');
+  handleClick('button-week');
+  handleClick('button-month');
+
+  function handleClick(buttonId) {
+    var period = buttonId.split("-")[1];
+    d3.select("#" + buttonId).on("click", function () {
+      data = generateData(period);
+      arcs.data(pie(data[1])).transition().attr("d", arc);
+      needle.data(data[0]).transition().ease(d3.easeElasticOut).duration(2000).attr("transform", function (d) {
+        r = 180 * d / data[1][3] - 90;
+        return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ")" + "scale(" + width * 0.85 / 2 + ")";
+      });
     });
-  });
+  }
 };
 
 var displayRating = exports.displayRating = function displayRating() {

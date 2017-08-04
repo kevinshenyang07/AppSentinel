@@ -46,6 +46,11 @@
         <div class="panel panel-card">
           <div class="panel-title">
             <h5 class='no-margin'>Users Engagement</h5>
+            <select class="active-user-select">
+              <option value="1" selected="selected">Daily Active Users</option>
+              <option value="2">Weekly Active Users</option>
+              <option value="3">Monthly Active Users</option>
+            </select>
           </div>
           <div class="panel-body">
             <div id="active-users" style="height:218px;"></div>
@@ -95,8 +100,10 @@
             <h5 class="no-margin">Average Rating in Last 24 Hours</h5>
           </div>
           <div class="panel-body">
-            <button type="button" id="button">in Last Week</button>
-            <h2 id="rating" style="height:195px;"></h2>
+            <button type="button" id="button-day">Default</button>
+            <button type="button" id="button-week">Last Week</button>
+            <button type="button" id="button-month">Last Month</button>
+            <div id="rating" style="height:205px;"></div>
           </div>
         </div>
       </div>
@@ -107,7 +114,7 @@
             <h5 class='no-margin'>Geolocation Distribution (by thousand users)</h5>
           </div>
           <div class="panel-body">
-            <div id="geo" style="height:250px;">
+            <div id="geo" style="height:245px;">
             </div>
           </div>
         </div>
