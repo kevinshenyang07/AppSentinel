@@ -3,7 +3,7 @@ body {
 }
 
 .panel-title h5 {
-	padding-left: 10px;
+	padding-left: 22px;
 	margin-bottom: 0px;
 }
 
@@ -167,7 +167,10 @@ body {
 
 /* reviews */
 #reviews {
-	padding: 20px 0px 20px 0px;
+	display: flex;
+	align-items: center;
+	padding: 40px 0px 20px 0px;
+
 }
 
 #reviews-container p {
@@ -193,4 +196,9 @@ body {
 
 .attention-low {
 	color: green;
+}
+
+/* rating */
+.needle {
+	fill: #464A4F;
 }
