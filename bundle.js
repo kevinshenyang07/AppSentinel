@@ -139,8 +139,8 @@ var generateActiveUserNumbers = function generateActiveUserNumbers(time) {
     return {
         'time': time,
         'DAU': Math.floor(base * (1 + (Math.random() - 0.5) * 0.25)),
-        'WAU': Math.floor(base * 2 * (1 + (Math.random() - 0.5) * 0.25)),
-        'MAU': Math.floor(base * 5 * (1 + (Math.random() - 0.5) * 0.25))
+        'WAU': Math.floor(base * 1.2 * (1 + (Math.random() - 0.5) * 0.25)),
+        'MAU': Math.floor(base * 1.5 * (1 + (Math.random() - 0.5) * 0.25))
     };
 };
 
@@ -173,10 +173,15 @@ var generate = function generate(data, id, categories, axisNum) {
         return d.time;
     }));
     // extent returns [min, max]
-    var yRange = d3.extent(ddata, function (d) {
-        return d[option];
-    });
-    var y = d3.scaleLinear().range([height, 0]).domain([yRange[1] / 2, yRange[1] * 1.2]);
+    // set y axis to be stable, which make it possible to display
+    // all three series together
+    var yMax = d3.max(ddata, function (d) {
+        return d["MAU"];
+    }) * 1.1;
+    var yMin = d3.min(ddata, function (d) {
+        return d["DAU"];
+    }) * 0.9;
+    var y = d3.scaleLinear().range([height, 0]).domain([yMin, yMax]);
 
     // defined axes
     var xAxis = d3.axisBottom(x).ticks(d3.timeMinute.every(Math.floor(data.length / axisNum))).tickSize(-height).tickPadding([6]);
@@ -244,19 +249,27 @@ var generate = function generate(data, id, categories, axisNum) {
         $(this).tooltip('destroy');
     });
 
-    $(".active-user-select").change(function (sel) {
-        // remove old chart and re-generate
-        d3.selectAll("#svg-active-users").remove();
-        generate(data, id, categories, axisNum);
-    });
-
     var axisOpt = { x: x, y: y, xAxis: xAxis, width: width, height: height };
-    var svgAttr = { svg: svg, points: points, area: area, path: path };
+    var svgAttr = { svg: svg, points: points, area: area, path: path, legend: legend };
+
+    $(".active-user-select").change(function () {
+        redraw(data, id, categories, axisOpt, svgAttr, 8);
+    });
 
     return { axisOpt: axisOpt, svgAttr: svgAttr };
 };
 
-var redraw = function redraw(data, id, categories, x, y, xAxis, svg, area, path, points, height, axisNum) {
+var redraw = function redraw(data, id, categories, axisOpt, svgAttr, axisNum) {
+    // get options and attributes
+    var x = axisOpt["x"];
+    var y = axisOpt["y"];
+    var xAxis = axisOpt["xAxis"];
+    var height = axisOpt["height"];
+    var svg = svgAttr["svg"];
+    var points = svgAttr["points"];
+    var area = svgAttr["area"];
+    var path = svgAttr["path"];
+
     //format of time data
     var parseTime = d3.timeParse("%H:%M");
     var formatNumber = d3.format(".0%");
@@ -281,7 +294,17 @@ var redraw = function redraw(data, id, categories, x, y, xAxis, svg, area, path,
 
     svg.select("#active-users-x-axis").transition().duration(200).ease(d3.easeSin).call(xAxis);
 
-    //area line updating
+    // select ele with class legend then change legend text
+    svg.selectAll(".legend text").text(selected);
+
+    // update area
+    area.x(function (d) {
+        return x(d.time);
+    }).y0(height).y1(function (d) {
+        return y(d[option]);
+    });
+
+    // update area line
     path.datum(ddata).transition().duration(200).attr("class", "areaM").attr("d", area);
 
     //circle updating
@@ -300,7 +323,6 @@ var redraw = function redraw(data, id, categories, x, y, xAxis, svg, area, path,
 
     //remove old dot
     points.selectAll(".usertipPoints").data(ddata).exit().transition().duration(200).remove();
-    // debugger;
 };
 
 //dynamic data and chart update
@@ -328,6 +350,7 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
         //update input data
         activeUserData.push(generateActiveUserNumbers(hAxis + ":" + mAxis));
 
+        // pseudo time update 
         if (mAxis === 59) {
             hAxis++;
             mAxis = 0;
@@ -335,10 +358,10 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
             mAxis++;
         }
 
-        if (Object.keys(activeUserData).length === 16) activeUserData.shift();
+        if (Object.keys(activeUserData).length === 12) activeUserData.shift();
 
-        redraw(activeUserData, id, categories, sca.axisOpt['x'], sca.axisOpt['y'], sca.axisOpt['xAxis'], sca.svgAttr['svg'], sca.svgAttr['area'], sca.svgAttr['path'], sca.svgAttr['points'], sca.axisOpt['height'], 8);
-    }, 4000);
+        redraw(activeUserData, id, categories, sca.axisOpt, sca.svgAttr, 8);
+    }, 2000);
 
     $("#svg-active-users").on("remove", function () {
         return clearInterval(interval);
@@ -676,7 +699,7 @@ var displayReviews = exports.displayReviews = function displayReviews() {
   createReviews(sampleReviews);
   var interval = setInterval(function () {
     return updateReviews(sampleReviews);
-  }, 4000);
+  }, 3000);
   $("#reviews-container").on("remove", function () {
     return clearInterval(interval);
   });
