@@ -378,7 +378,7 @@ var displayActiveUsers = exports.displayActiveUsers = function displayActiveUser
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var channelData = [{ channel: 'Organic', platform: { iOS: 10500, Android: 15100, Desktop: 2300 } }, { channel: 'Google', platform: { iOS: 7900, Android: 6700, Desktop: 3100 } }, { channel: 'FB', platform: { iOS: 5700, Android: 6200, Desktop: 1100 } }, { channel: 'AdMob', platform: { iOS: 1400, Android: 4100, Desktop: 580 } }, { channel: 'Email', platform: { iOS: 450, Android: 810, Desktop: 1250 } }, { channel: 'Referral', platform: { iOS: 2500, Android: 700, Desktop: 240 } }];
+var channelData = [{ channel: 'Organic', platform: { iOS: 10500, Android: 15100, Desktop: 2300 } }, { channel: 'Google', platform: { iOS: 6900, Android: 8700, Desktop: 3100 } }, { channel: 'Facebook', platform: { iOS: 4700, Android: 6200, Desktop: 1100 } }, { channel: 'Instagram', platform: { iOS: 2310, Android: 2120, Desktop: 670 } }, { channel: 'AdMob', platform: { iOS: 1400, Android: 4100, Desktop: 580 } }, { channel: 'Email', platform: { iOS: 450, Android: 810, Desktop: 1250 } }, { channel: 'Referral', platform: { iOS: 2500, Android: 700, Desktop: 240 } }];
 
 var createView = function createView(id, data) {
   // geometry
@@ -391,7 +391,7 @@ var createView = function createView(id, data) {
       height: height
     },
     histogram: {
-      width: 300,
+      width: 360,
       height: height
     }
   };
@@ -456,7 +456,7 @@ var createView = function createView(id, data) {
     var hG = {};
     var histDim = dimension.histogram;
 
-    var svg = d3.select('#channels-right').append("svg").attr("width", histDim.width + margin.left + margin.right).attr("height", histDim.height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + 12) + ")");
+    var svg = d3.select('#channels-right').append("svg").attr("width", histDim.width).attr("height", histDim.height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + 12) + ")");
 
     var x = d3.scaleBand().rangeRound([0, histDim.width]).padding(0.1).domain(byChannelData.map(function (d) {
       return d[0];
@@ -490,13 +490,13 @@ var createView = function createView(id, data) {
 
       pieChart.update(nD);
       legend.update(nD);
-    };
+    }
 
     function mouseout(d) {
       // reset the pie-chart and legend.
       pieChart.update(totalByPlatform);
       legend.update(totalByPlatform);
-    };
+    }
 
     bars.append("text").text(function (d) {
       return d3.format(",")(d[1]);
@@ -759,14 +759,16 @@ var CreateGauge = function CreateGauge(id) {
   });
 
   // set needle initial attributes
-  var needle = svg.selectAll(".needle").data(data[0]).enter().append('path').classed('needle', true).attr('d', ['M0 -1', 'L0.03 0', 'A 0.03 0.03 0 0 1 -0.03 0', 'Z'].join(' ')).attr("transform", function (d) {
-    r = 180 * d / data[1][3] - 90;
-    return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ") " + "scale(" + width * 0.85 / 2 + ")";
-  });
+  var needle = svg.selectAll(".needle").data(data[0]).enter().append('path').classed('needle', true).attr('d', ['M0 -1', 'L0.03 0', 'A 0.03 0.03 0 0 1 -0.03 0', 'Z'].join(' ')).attr("transform", placeNeedle);
 
   handleClick('button-day');
   handleClick('button-week');
   handleClick('button-month');
+
+  function placeNeedle(d) {
+    r = 180 * d / data[1][3] - 90;
+    return "translate(" + (width / 2 - margin.left) + "," + (height - margin.bottom) + ") " + "rotate(" + r + ") " + "scale(" + width * 0.85 / 2 + ")";
+  }
 
   // method to update needle attributes
   function handleClick(buttonId) {
@@ -774,10 +776,7 @@ var CreateGauge = function CreateGauge(id) {
     d3.select("#" + buttonId).on("click", function () {
       data = generateData(period);
       arcs.data(pie(data[1])).transition().attr("d", arc);
-      needle.data(data[0]).transition().ease(d3.easeElasticOut).duration(2000).attr("transform", function (d) {
-        r = 180 * d / data[1][3] - 90;
-        return "translate(" + width / 2 + "," + (height - margin.bottom) + ") " + "rotate(" + r + ")" + "scale(" + width * 0.85 / 2 + ")";
-      });
+      needle.data(data[0]).transition().ease(d3.easeElasticOut).duration(2000).attr("transform", placeNeedle);
     });
   }
 };
