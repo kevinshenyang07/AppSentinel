@@ -2,13 +2,11 @@
 
 [Take a look at App Sentinel](https://kevinshenyang07.github.io/AppSentinel/)
 
-### Background
+Since I used to be a data analyst, I always hold a passion to create a dashboard that looks clean but contains large amount of information at different level.
 
-All the mobile companies understand the performance of their apps are critical to their success. The growth hackers care a lot about user activities, the marketeers care a lot about cost/downloads efficiency, and the engineers care a lot about high availability and low latency.
+All the mobile companies understand the performance of their apps are critical to their success. The growth hackers care a lot about user activities, the marketeers care a lot about cost/downloads efficiency, and the engineers care a lot about high availability and low latency. App Sentinel is a dashboard that is designed to visualize the most important metrics for one of those domains. In this case, the choice is growth hacking.
 
-App Sentinel is a dashboard that is designed to visualize the most important metrics for one of those domains. In this case, I choose growth hacking - the topic I'm more familiar with.
-
-First four visualizations: 
+First four visualizations:
 
 ![desktop1](docs/desktop1.png)
 
@@ -20,15 +18,18 @@ Also support mobile:
 
 <img src="docs/mobile.png" height="400">
 
+
 ### Features and Implementation
 
-App Sentinel is a front-end project, but it's designed to be able to be plugged into a live data feed from back-end easily. All visualzations ingest JSON data and have no dependencies on the back-end. To emulate that process it uses randomly generated data.
+App Sentinel is a front-end project, but it's designed to be able to be plugged into a live data feed from back-end easily. All visualizations ingest JSON data and have no dependencies on the back-end. To emulate that process it uses randomly generated data.
 
 Each visualzation is designed to present different levels of details interactively. The goal is to provide as much as information the user would need, but at the same time keep the visualization clean and organized.
 
+One might be wondering why I want to add live reviews on the dashboard, it is for reason: users are the best testers for our apps, and their feedbacks will keep surprising our product managers. With a text classification model at the backend, I would be able to select the reviews that might helps most and highlight them to the viewers, which also saves hours of time for product managers to go through the reviews themselves.
+
 #### Visualization for User Engagement
 
-This is the most challenging one, and also most representative of D3's features. To be able to take in different number of data points and dynamically adjust the area and x axis. By using D3's enter-join-exit mechanism, one can declare the data join pattern first then push the data to the chart later. 
+This is the most challenging one, and also most representative of D3's features. To be able to take in different number of data points and dynamically adjust the area and x axis. By using D3's enter-join-exit mechanism, one can declare the data join pattern first then push the data to the chart later.
 
 Below is a code snippet for dynamically updating toolips points:
 
@@ -64,7 +65,7 @@ function mouseover(d) {
   const nd = d3.keys(singleChannelData.platform).map(
     s => ({type:s, platform: singleChannelData.platform[s]})
   );
-  
+
   pieChart.update(nd);
   legend.update(nd);
 };
